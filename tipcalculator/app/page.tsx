@@ -25,12 +25,12 @@ export default function Home() {
           <label className="mb-3 block text-lg font-semibold text-gray-700">
             Bill Amount
           </label>
-          <input
-            type="number"
-            className="w-full rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-2xl font-bold text-center focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200"
-            placeholder="฿ Enter bill amount"
-            onChange={(e) => setBill(Number(e.target.value))}
+         <input
+          type="number"
+          className="border w-full p-2 mb-3 rounded text-black"
+          onChange={(e) => setBill(Number(e.target.value))}
           />
+
         </div>
 
         <div className="mb-10 text-center">
