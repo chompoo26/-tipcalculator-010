@@ -1,72 +1,63 @@
-"use client";
+"use client"
+import { type ChangeEventHandler, useState } from 'react'
+interface TodoFormProps {
+  addTodo: (todo: string) => void
+}
 
-import { useState } from "react";
+const TodoForm = ({addTodo}: TodoFormProps) => {
+    const [todo, setTodo] = useState('')
 
-export default function Home() {
-  const [bill, setBill] = useState<number>(0);
-  const [tipTotal, setTipTotal] = useState<number>(0);
-  const [billTotal, setBillTotal] = useState<number>(0);
+     const handleTodoFormChanged: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setTodo(event.target.value)
+     };
+  const handleAddTodo = () => {
+    addTodo(todo)
+    setTodo('')
+  }
 
-  const calculateTip = () => {
-    const tip = bill * 0.05; 
-    setTipTotal(tip);
-    setBillTotal(bill + tip);
+  return(
+    <>
+    <input type="text" onChange={handleTodoFormChanged} value={todo} />
+    <button onClick={handleAddTodo}>Add Todo</button>
+    </>
+  );
+};
+interface Todo {
+  id: number ;
+  content: string;
+}
+
+interface TodoListProps{
+  todos : Todo []
+}
+
+const TodoList = ({todos} : TodoListProps) => {
+  return(
+    <>
+   <ul>
+        {
+          todos.map(todo => <li key={todo.id}>{todo.content}</li>)
+        }
+      </ul>
+    </>
+  )
+};
+
+const IndexPage = () => {
+   const [todos, setTodos] = useState([
+    { id: 1, content: 'Todo#1' },
+    { id: 2, content: 'Todo#2' },
+    { id: 3, content: 'Todo#3' },
+  ])
+   const addTodo = (todo: string) => {
+    setTodos([{ id: todos.length + 1, content: todo}, ...todos]);
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-100 via-green-100 to-teal-200 p-6">
-      <div className="w-full max-w-lg rounded-3xl bg-white p-10 shadow-xl">
-        <h1 className="mb-2 text-center text-4xl font-extrabold text-emerald-600">
-          Tip Calculator
-        </h1>
-       
-
-        <div className="mb-8">
-          <label className="mb-3 block text-lg font-semibold text-gray-700">
-            Bill Amount
-          </label>
-          <input
-            type="number"
-            className="w-full rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-2xl font-bold text-center focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200"
-            placeholder="฿ Enter bill amount"
-            onChange={(e) => setBill(Number(e.target.value))}
-          />
-        </div>
-
-        <div className="mb-10 text-center">
-         
-          <div className="inline-block rounded-full bg-emerald-500 px-10 py-4 text-xl font-bold text-white shadow-md">
-            5%
-          </div>
-        </div>
-
-        <button
-          onClick={calculateTip}
-          className="mb-10 w-full rounded-xl bg-gradient-to-r from-emerald-500 to-green-500 py-4 text-2xl font-bold text-white shadow-lg transition hover:from-emerald-600 hover:to-green-600 active:scale-95"
-        >
-          Calculate
-        </button>
-
-        <div className="space-y-6">
-          <div className="flex items-center justify-between rounded-xl bg-emerald-50 p-5">
-            <span className="text-lg font-semibold text-gray-700">
-              Tip Total
-            </span>
-            <span className="text-2xl font-extrabold text-emerald-600">
-              ฿ {tipTotal.toFixed(2)}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between rounded-xl bg-emerald-100 p-6">
-            <span className="text-xl font-semibold text-gray-700">
-              Bill Total
-            </span>
-            <span className="text-3xl font-extrabold text-emerald-700">
-              ฿ {billTotal.toFixed(2)}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+    <>
+      <TodoForm addTodo={addTodo}></TodoForm>
+      <TodoList todos={todos}></TodoList>
+    </>
+  )
+};
+export default IndexPage;
